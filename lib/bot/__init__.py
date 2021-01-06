@@ -12,7 +12,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from discord.ext.commands.errors import CommandOnCooldown
 
-from ..db import db 
+from ..db import db
 
 
 PREFIX = '='
