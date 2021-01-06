@@ -27,6 +27,7 @@ def commit():
 def autosave(sched):
     sched.add_job(commit, CronTrigger(minute=30, second=0))
 
+
 def close():
     cxn.close()
 
@@ -46,13 +47,16 @@ def records(command, *values):
 
     cur.fetchall()
 
+
 def column(command, *values):
     cur.execute(command, tuple(values))
 
     return [item[0] for item in cur.fetchall()]
 
+
 def execute(command, *values):
     cur.execute(command, tuple(values))
+
 
 def multiexec(command, valueset):
     cur.executemany(command, tuple(valueset))

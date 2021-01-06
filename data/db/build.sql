@@ -1,4 +1,4 @@
 CREATE TABLE IF NOT EXISTS rules (
-    RuleNo INTEGER PRIMARY KEY,
+    RuleNo integer PRIMARY KEY,
     Rule TEXT
 );
