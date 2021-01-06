@@ -14,7 +14,7 @@ class Reset(Cog):
 
 	@command(name="reset", aliases=["rs"])
 	async def reset_user(self, ctx):
-            pass
+            print("		--> the reset cog is functional")
         
 
 	@Cog.listener()

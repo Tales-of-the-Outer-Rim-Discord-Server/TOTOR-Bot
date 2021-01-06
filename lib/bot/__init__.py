@@ -27,7 +27,7 @@ class ready(object):
 			setattr(self, cog, False)
 	def ready_up(self, cog):
 		setattr(self, cog, True)
-		print(f'{cog} Cog ready!')
+		print(f' - {cog} cog is ready!')
 	def all_ready(self):
 		return all([getattr(self, cog) for cog in COGS])
 
@@ -51,7 +51,7 @@ class Bot(BotBase):
 	def setup(self):
 		for cog in COGS:
 			self.load_extension(f"lib.cogs.{cog}")
-			print(f"{cog} cog loaded")
+			print(f" - {cog} cog loaded")
 
 		print("Setup Complete")
 

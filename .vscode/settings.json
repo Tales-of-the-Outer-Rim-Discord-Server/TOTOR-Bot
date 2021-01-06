@@ -6,6 +6,5 @@
             "name": "TOTOR DB",
             "database": "${workspaceFolder:TOTOR-Bot}/data/db/database.db"
         }
-    ],
-    "sqltools.useNodeRuntime": true
+    ]
 }
