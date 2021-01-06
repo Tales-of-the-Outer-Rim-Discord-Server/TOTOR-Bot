@@ -1,5 +1,5 @@
 # TOTOR-Bot
-# Bot Language: Python
+###### Bot Language: Python
 
 ## Description
 A bot for a Star Wars RP discord. 
