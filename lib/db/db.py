@@ -53,8 +53,10 @@ def column(command, *values):
 
 def execute(command, *values):
     cur.execute(command, tuple(values))
+
 def multiexec(command, valueset):
     cur.executemany(command, tuple(valueset))
+
 def scriptexec(path):
     with open(path, "r", encoding="UTF-8") as script:
         cur.executescript(script.read())
