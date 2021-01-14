@@ -15,8 +15,8 @@ from discord.ext.commands.errors import CommandOnCooldown
 from ..db import db
 
 
-PREFIX = '='
-OWNER_IDS = [197748134485426177]
+PREFIX = 't!'
+OWNER_ID = 197748134485426177
 COGS = [path.split("\\")[-1][:-3] for path in glob('./lib/cogs/*.py')]
 IGNORE_EXCEPTIONS = (CommandNotFound, BadArgument)
 
@@ -45,7 +45,7 @@ class Bot(BotBase):
 		db.autosave(self.scheduler)
 		super().__init__(
 			command_prefix=PREFIX,
-			owner_ids=OWNER_IDS,
+			owner_id=OWNER_ID,
 			intents=Intents.all(),
 			)
 
