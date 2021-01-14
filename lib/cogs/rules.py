@@ -14,10 +14,10 @@ class Rules(Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
-	@command(name="rules", aliases=["rule"])
-	async def reset_user(self, ctx):
-            print("		--> the rules cog is functional")
-        
+	@command(name="rules", aliases=["rule", "server_rules"])
+	async def server_rules(self, ctx):
+		"""THIS IS NOT A COMMAND YET!"""
+		print("		--> the rules cog is functional")
 
 	@Cog.listener()
 	async def on_ready(self):

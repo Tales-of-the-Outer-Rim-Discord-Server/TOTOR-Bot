@@ -36,6 +36,7 @@ class Bot(BotBase):
 	def __init__(self):
 		self.PREFIX=PREFIX
 		self.ready = False
+		self.guild = None
 		self.cogs_ready = ready()
 
 		self.scheduler = AsyncIOScheduler()
@@ -97,11 +98,12 @@ class Bot(BotBase):
 			await ctx.send("I do not have permission to do that.")
 
 		else:
-			raise exc.original
+			raise exc
 
 	async def on_ready(self):
 		if not self.ready:
 			self.stdout = self.get_channel(795489592413257748)
+			self.guild = self.get_guild(787378094318944326)
 
 			while not self.cogs_ready.all_ready():
 				await sleep(0.5)
