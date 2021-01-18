@@ -150,6 +150,7 @@ class Shop(Cog):
 	other_items = [("Other Item (Common)",               10),
 	               ("Other Item (Rare)",                 30),
 				   ("Other Item (Restricted)",          100),
+				   ("Carbonite Spray *(Common)",         50),
 				   ("Death Sticks (Restricted)",         60),
 				   ("Spice (Restricted)",               300),
 				   ("Refined Coaxium (Restricted)",    1500),
