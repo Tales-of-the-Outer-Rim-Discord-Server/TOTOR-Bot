@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS rules (
 
 CREATE TABLE IF NOT EXISTS BountyHunter (
     DiscordID integer PRIMARY KEY,
+    HunterName TEXT,
     Bounties_Completed integer,
     Bounty_Value integer,
     Guild TEXT
@@ -16,4 +17,11 @@ CREATE TABLE IF NOT EXISTS BountyBoard (
     ValueDead integer,
     ValueAlive integer,
     OtherInfo TEXT
+);
+
+CREATE TABLE IF NOT EXISTS Assassins (
+    DiscordID integer PRIMARY KEY,
+    AssassinName TEXT,
+    Completed integer,
+    AssainationValue integer
 )

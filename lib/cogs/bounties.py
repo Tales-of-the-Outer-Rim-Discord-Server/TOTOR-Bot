@@ -12,7 +12,7 @@ from discord.ext.commands import command, cooldown
 class Bounty(Cog):
 	def __init__(self, bot):
 		self.bot = bot
-
+		
 	@command(name="set-bounty", aliases=["new-bounty", "bounty-n", "bounty-s"])
 	async def New_Bounty(self, ctx, target: Member, alive: Optional[int]=1000, dead: Optional[int] ="Not to be brought in dead", *, OtherInfo: Optional[str]="No Other Info"):
 		if target:
@@ -21,7 +21,7 @@ class Bounty(Cog):
 			# print(f" ---> Alive={alive}")
 			# print(f" ---> Dead={dead}")
 			# print(f" ---> OtherInfo={OtherInfo}")
-			await ctx.send(f"Author={ctx.author}\nTarget= {target}\nDead={dead}\nAlive={alive}\nOtherInfo={OtherInfo}")
+			await ctx.send(f" Author={ctx.author} {ctx.author.id} \nTarget= {target}{target.id} \n Dead={dead} \n Alive={alive} \n OtherInfo={OtherInfo}")
 
 	@command(name="claim-bounty", aliases=["bounty-claim", "claim", "bounty-c"])
 	async def Claim_Bounty(self, ctx, holder: Member, target: Member):
@@ -30,7 +30,7 @@ class Bounty(Cog):
 					# print(f"Author={ctx.author}")
 					# print(f"Holder={holder}")
 					# print(f"Target={target}")
-					await ctx.send(f" Author={ctx.author} \n Holder={holder} \n Target={target}")
+					await ctx.send(f" Author={ctx.author} {ctx.author.id} \n Holder={holder} {holder.id} \n Target={target} {target.id}")
 			else:
     					await ctx.send("You must mention the target to claim this bounty.")	
 		else:
@@ -38,21 +38,30 @@ class Bounty(Cog):
 
 	@command(name="bounty-hunter", aliases=["register-hunter", "register"])
 	async def Register_Hunter(self, ctx, name: Optional[str]):
-		pass
+		if name:
+			await ctx.send(f"Hunter Registered \n Owner: {ctx.author} \n Name: {name} \n Guild: None \n Completed Bounties: 0 \n Completed Bounty Value: 0")
+		else:
+			name = ctx.author.display_name
+			await ctx.send(f"Hunter Registered \n Owner: {ctx.author.mention} \n Name: {name} \n Guild: None \n Completed Bounties: 0 \n Completed Bounty Value: 0")
 
 
 	@command(name="hunters", aliases=["list-bounty-hunters", "list-hunters"])
 	async def List_Hunters(self, ctx):
 		pass
 
-	@command(name="hunter", aliases="hunter-stats")
-	async def Search_Hunters(self, ctx, name):
-		pass
+	@command(name="hunter-search", aliases=["hunter-stats", "hunter-s"])
+	async def Search_Hunters(self, ctx, name: Optional[str]):
+		if not name:
+			name = ctx.author.display_name
+			await ctx.send(f"Searched for {name} in the Galactic Archives.")
+		else:
+    			await ctx.send(f"Searched for {name} in the Galactic Archives")
 
 	@Cog.listener()
-	async def on_ready(self):
+	async def on_ready(self, ctx):
 		if not self.bot.ready:
 			self.bot.cogs_ready.ready_up("Bounty")
+			author = ctx.author
 
 
 def setup(bot):
