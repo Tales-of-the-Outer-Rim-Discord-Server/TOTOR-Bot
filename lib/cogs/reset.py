@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from lib.bot import OWNER_ID
 
 from discord import Member
@@ -6,6 +5,8 @@ from discord.ext.commands import Cog
 from discord.ext.commands import command
 from discord.ext.commands.converter import Greedy
 from discord.ext.commands.core import bot_has_permissions, has_permissions
+
+from ..db import db
 
 
 class Reset(Cog):
