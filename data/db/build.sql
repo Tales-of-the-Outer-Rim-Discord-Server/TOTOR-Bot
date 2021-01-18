@@ -1,7 +1,7 @@
-CREATE TABLE IF NOT EXISTS rules (
-    RuleNo integer PRIMARY KEY,
-    Rule TEXT
-);
+-- CREATE TABLE IF NOT EXISTS rules (
+--     RuleNo integer PRIMARY KEY,
+--     Rule TEXT
+-- );
 
 CREATE TABLE IF NOT EXISTS BountyHunter (
     DiscordID integer PRIMARY KEY,
@@ -24,4 +24,4 @@ CREATE TABLE IF NOT EXISTS Assassins (
     AssassinName TEXT,
     Completed integer,
     AssainationValue integer
-)
+);

@@ -20,19 +20,19 @@ class Characters(Cog):
 	async def Register_Hunter(self, ctx, name: Optional[str]):
             """Register a Bounty Hunter"""
             if name:
-                    await ctx.send(f"Hunter Registered \n Owner: {ctx.author} \n Name: {name} \n Guild: None \n Completed Bounties: 0 \n Completed Bounty Value: 0")
+                    await ctx.send(f"Hunter Registered \n Owner: {ctx.author.mention} \n Character Name: {name} \n Guild: None \n Completed Bounties: 0 \n Completed Bounty Value: 0")
             else:
                 name = ctx.author.display_name
-                await ctx.send(f"Hunter Registered \n Owner: {ctx.author.mention} \n Name: {name} \n Guild: None \n Completed Bounties: 0 \n Completed Bounty Value: 0")
+                await ctx.send(f"Hunter Registered \n Owner: {ctx.author.mention} \n Character Name: {name} \n Guild: None \n Completed Bounties: 0 \n Completed Bounty Value: 0")
 
 	@command(name="assassin", aliases=["register-assassin"])
 	async def Register_Assassin(self, ctx, name: Optional[str]):
             """Register an Assassin Character"""
             if name:
-                    await ctx.send(f"Assassin Registered \n Owner: {ctx.author} \n Name: {name} \n Guild: None \n Completed Bounties: 0 \n Completed Bounty Value: 0")
+                    await ctx.send(f"Assassin Registered \n Owner: {ctx.author.mention} \n Character Name: {name} \n Guild: None \n Completed Bounties: 0 \n Completed Bounty Value: 0")
             else:
                 name = ctx.author.display_name
-                await ctx.send(f"Assassin Registered \n Owner: {ctx.author.mention} \n Name: {name} \n Guild: None \n Completed Bounties: 0 \n Completed Bounty Value: 0")
+                await ctx.send(f"Assassin Registered \n Owner: {ctx.author.mention} \n Character Name: {name} \n Guild: None \n Completed Bounties: 0 \n Completed Bounty Value: 0")
 
 
 
