@@ -15,7 +15,7 @@ class Rules(Cog):
 		self.bot = bot
 
 	@command(name="rules", aliases=["rule", "server_rules"])
-	async def server_rules(self, ctx):
+	async def server_rules(self, ctx, rule: Optional[int]):
 		"""THIS IS NOT A COMMAND YET!"""
 		print("		--> the rules cog is functional")
 
