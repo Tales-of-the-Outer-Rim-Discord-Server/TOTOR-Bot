@@ -1,5 +1,8 @@
+from operator import truediv
 from random import choice, randint
 from typing import Optional
+
+from discord.ext.commands.core import has_permissions
 from ..db import db
 
 from aiohttp import request
@@ -12,9 +15,6 @@ from discord.ext.commands import command, cooldown
 class Characters(Cog):
 	def __init__(self, bot):
 		self.bot = bot
-
-
-
 
 	@command(name="bounty-hunter", aliases=["register-hunter"])
 	async def Register_Hunter(self, ctx, name: Optional[str]):
@@ -34,10 +34,6 @@ class Characters(Cog):
                 name = ctx.author.display_name
                 await ctx.send(f"Assassin Registered \n Owner: {ctx.author.mention} \n Character Name: {name} \n Guild: None \n Completed Bounties: 0 \n Completed Bounty Value: 0")
 
-
-
-
-
 	@command(name="list-hunters", aliases=["list-bounty-hunters", "hunters"])
 	async def List_Hunters(self, ctx):
             """ Get a list of all bounty hunters in the server """
@@ -47,9 +43,6 @@ class Characters(Cog):
 	async def List_Assassins(self, ctx):
             """ Get a list of all assassins in the server """
             pass
-
-
-
 
 	@command(name="hunter-search", aliases=["hunter-stats", "hunter-s"])
 	async def Search_Hunters(self, ctx, name: Optional[str]):
@@ -67,7 +60,7 @@ class Characters(Cog):
                 name = ctx.author.display_name
                 await ctx.send(f"Searched for {name} in the Galactic Archives.")
             else:
-                    await ctx.send(f"Searched for {name} in the Galactic Archives")
+                await ctx.send(f"Searched for {name} in the Galactic Archives")
 
 	@Cog.listener()
 	async def on_ready(self, ctx):
