@@ -64,9 +64,10 @@ class Characters(Cog):
 
 	@Cog.listener()
 	async def on_ready(self, ctx):
-		if not self.bot.ready:
-			self.bot.cogs_ready.ready_up("Bounty")
-			author = ctx.author
+            author = ctx.author
+            if not self.bot.ready:
+                self.bot.cogs_ready.ready_up("Bounty")
+            
 
 
 def setup(bot):

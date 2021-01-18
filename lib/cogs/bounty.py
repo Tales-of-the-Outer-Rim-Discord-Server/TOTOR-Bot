@@ -38,9 +38,10 @@ class Bounty(Cog):
 
 	@Cog.listener()
 	async def on_ready(self, ctx):
+		author = ctx.author
 		if not self.bot.ready:
 			self.bot.cogs_ready.ready_up("Bounty")
-			author = ctx.author
+			
 
 
 def setup(bot):
