@@ -23,7 +23,19 @@ class Bounty(Cog):
 			print(f" ---> OtherInfo={OtherInfo}")
 			await ctx.send(f"Author={ctx.author}\nTarget= {target}\nDead={dead}\nAlive={alive}\nOtherInfo={OtherInfo}")
 
-		
+	@command(name="claim-bounty", aliases=["bounty-claim", "claim", "bounty-c"])
+	async def Claim_Bounty(self, ctx, holder, Target):
+		if holder:
+			if Target:
+					print(f"Author={ctx.author}")
+					print(f"Holder={holder}")
+					print(f"Target={Target}")
+					await ctx.send(f" Author={ctx.author} \n Holder={holder} \n Target={Target}")
+			else:
+    					await ctx.send("You must mention the target to claim this bounty.")	
+		else:
+    			await ctx.send("You must mention the holder of the bounty.")
+
 
 	@Cog.listener()
 	async def on_ready(self):
