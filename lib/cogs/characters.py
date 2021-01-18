@@ -9,7 +9,7 @@ from discord.ext.commands import BadArgument
 from discord.ext.commands import command, cooldown
 
 
-class Bounty(Cog):
+class Characters(Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
@@ -77,4 +77,4 @@ class Bounty(Cog):
 
 
 def setup(bot):
-	bot.add_cog(Bounty(bot))
+	bot.add_cog(Characters(bot))

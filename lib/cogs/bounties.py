@@ -36,27 +36,6 @@ class Bounty(Cog):
 		else:
     			await ctx.send("You must mention the holder of the bounty.")
 
-	@command(name="bounty-hunter", aliases=["register-hunter", "register"])
-	async def Register_Hunter(self, ctx, name: Optional[str]):
-		if name:
-			await ctx.send(f"Hunter Registered \n Owner: {ctx.author} \n Name: {name} \n Guild: None \n Completed Bounties: 0 \n Completed Bounty Value: 0")
-		else:
-			name = ctx.author.display_name
-			await ctx.send(f"Hunter Registered \n Owner: {ctx.author.mention} \n Name: {name} \n Guild: None \n Completed Bounties: 0 \n Completed Bounty Value: 0")
-
-
-	@command(name="hunters", aliases=["list-bounty-hunters", "list-hunters"])
-	async def List_Hunters(self, ctx):
-		pass
-
-	@command(name="hunter-search", aliases=["hunter-stats", "hunter-s"])
-	async def Search_Hunters(self, ctx, name: Optional[str]):
-		if not name:
-			name = ctx.author.display_name
-			await ctx.send(f"Searched for {name} in the Galactic Archives.")
-		else:
-    			await ctx.send(f"Searched for {name} in the Galactic Archives")
-
 	@Cog.listener()
 	async def on_ready(self, ctx):
 		if not self.bot.ready:
