@@ -1,16 +1,11 @@
 *.db
 *.db-journal
-
 __pycache__
-
 lib/bot/token.0
-
 lib/cogs/__pycache__/
 lib/cogs/bounty.py
 lib/cogs/charac.py
 lib/cogs/rules.py
-
 TOTOR_DB.session.sql
-
 .vscode
 
