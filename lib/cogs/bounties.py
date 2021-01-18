@@ -1,5 +1,5 @@
 from random import choice, randint
-from typing import NamedTuple, Optional
+from typing import Optional
 from ..db import db
 
 from aiohttp import request
@@ -14,7 +14,7 @@ class Bounty(Cog):
 		self.bot = bot
 
 	@command(name="set-bounty", aliases=["new-bounty", "bounty-n", "bounty-s"])
-	async def New_Bounty(self, ctx, target, alive: Optional[int]=1000, dead: Optional[int] ="Not to be brought in dead", *, OtherInfo: Optional[str]="No Other Info"):
+	async def New_Bounty(self, ctx, target: Member, alive: Optional[int]=1000, dead: Optional[int] ="Not to be brought in dead", *, OtherInfo: Optional[str]="No Other Info"):
 		if target:
 			print(f" ---> Author={ctx.author}")
 			print(f" ---> Target= {target}")
@@ -24,7 +24,7 @@ class Bounty(Cog):
 			await ctx.send(f"Author={ctx.author}\nTarget= {target}\nDead={dead}\nAlive={alive}\nOtherInfo={OtherInfo}")
 
 	@command(name="claim-bounty", aliases=["bounty-claim", "claim", "bounty-c"])
-	async def Claim_Bounty(self, ctx, holder, target):
+	async def Claim_Bounty(self, ctx, holder: Member, target: Member):
 		if holder:
 			if target:
 					print(f"Author={ctx.author}")
