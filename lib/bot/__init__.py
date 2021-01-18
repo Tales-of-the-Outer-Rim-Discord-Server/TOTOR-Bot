@@ -76,7 +76,8 @@ class Bot(BotBase):
 	async def on_error(self, err, *args, **kwargs):
 		if err == "on_command_error":
 			await args[0].send('Something went wrong.')
-			
+		raise err
+	
 	async def on_command_error(self, ctx, exc):
 		if any([isinstance(exc, error) for error in IGNORE_EXCEPTIONS]):
 			pass
