@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS BountyHunter (
     Bounty_Value integer
 );
 
-CREATE TABLE IF NOT EXISTS Bounty_Board (
+CREATE TABLE IF NOT EXISTS BountyBoard (
     PlacedByID integer PRIMARY KEY,
     TargetID integer,
     ValueDead integer,
