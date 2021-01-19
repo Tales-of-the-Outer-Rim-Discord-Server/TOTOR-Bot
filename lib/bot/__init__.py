@@ -1,6 +1,7 @@
 from asyncio.tasks import sleep
 from datetime import datetime
 from glob import glob
+from lib.cogs.bounty import BOUNTY_BOARD_CHANNEL
 
 from discord import Intents, Embed, File
 from discord.errors import Forbidden, HTTPException
@@ -19,7 +20,8 @@ PREFIX = 't!'
 OWNER_ID = 197748134485426177
 COGS = [path.split("\\")[-1][:-3] for path in glob('./lib/cogs/*.py')]
 IGNORE_EXCEPTIONS = (CommandNotFound, BadArgument)
-
+CREDITS_SYMBOL = "<:Credits:801201215375015966>"
+BOUNTY_BOARD_CHANNEL = 801213077353660436
 
 class ready(object):
 	def __init__(self):
@@ -77,7 +79,6 @@ class Bot(BotBase):
 		if err == "on_command_error":
 			await args[0].send('Something went wrong.')
 		raise err
-	
 	async def on_command_error(self, ctx, exc):
 		if any([isinstance(exc, error) for error in IGNORE_EXCEPTIONS]):
 			pass
@@ -104,6 +105,7 @@ class Bot(BotBase):
 		if not self.ready:
 			self.stdout = self.get_channel(795489592413257748)
 			self.guild = self.get_guild(787378094318944326)
+			
 
 			while not self.cogs_ready.all_ready():
 				await sleep(0.5)

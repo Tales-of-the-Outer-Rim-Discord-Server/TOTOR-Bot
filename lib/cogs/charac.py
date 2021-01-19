@@ -1,16 +1,19 @@
 from asyncio.windows_events import NULL
 from operator import not_, truediv
 from random import choice, randint
+import sqlite3
 from typing import Optional
 
 from discord.ext.commands.core import has_permissions
 from ..db import db
+from ..bot import CREDITS_SYMBOL
 
 from aiohttp import request
 from discord import Member, Embed
 from discord.ext.commands import Cog, BucketType
-from discord.ext.commands import BadArgument
+from discord.ext.commands import BadArgument 
 from discord.ext.commands import command, cooldown
+from sqlite3 import IntegrityError
 
 START_VALUE = 0
 COMPLETED_JOBS = 0
@@ -19,49 +22,137 @@ START_GUILD = "No guild"
 class Characters(Cog):
     def __init__(self, bot):
         self.bot = bot
-    
 
-    def hunter_register(self, author, Name):
-        Check1 = db.record("SELECT * FROM BountyHunter WHERE DiscordID=?", author.id)
-        print(f" -->> Check1 = {Check1}")
-        if Name: 
-            if Check1 == None:
-                discordID = author.id
-                hunterName = Name
 
-                Hunter = (discordID, hunterName, COMPLETED_JOBS, START_VALUE, START_GUILD)
-
-                db.execute("INSERT INTO BountyHunter VALUES (?, ?, ?, ?, ?)", Hunter)
-            else:
-                pass
-        else:
-            print("Name was not received")
 
 
     @command(name="bounty-hunter", aliases=["register-hunter"])
     async def Register_Hunter(self, ctx, name: Optional[str]):
         """Register a Bounty Hunter"""
+
         author = ctx.author
-        if name:
-                Name = name
-                # print(f"Bounty Hunter Registered with name variable. \n >> AuthorId: {author.id} \n >> Name: {Name}")
-                self.hunter_register(author, Name)
-                # await ctx.send(f"Hunter Registered \n Owner: {ctx.author.mention} \n Character Name: {name} \n Guild: None \n Completed Bounties: 0 \n Completed Bounty Value: 0")
+        discordID = author.id
+
+        CheckExists = db.field("SELECT DiscordID FROM BountyHunter WHERE DiscordID=?", discordID)
+
+        # print(f"---------------------------------------------------------\n -->> DiscordID: {CheckExists}\n---------------------------------------------------------")
+        
+        
+        if CheckExists:
+            await ctx.send(f"{author.mention} you already have a Bounty Hunter registered.")
         else:
-            Name = author.display_name
-            # print(f"Bounty Hunter Registered without name variable. \n >> AuthorId: {author.id} \n >> Name: {Name}")
-            self.hunter_register(author, Name)
-            # await ctx.send(f"Hunter Registered \n Owner: {author.mention} \n Character Name: {name} \n Guild: None \n Completed Bounties: 0 \n Completed Bounty Value: 0")
+            if name:
+                hunterName = name
+
+                db.execute("INSERT INTO BountyHunter (DiscordID, HunterName) VALUES (?, ?)", discordID, hunterName)
+                db.commit()
+
+                bh_embed = Embed(title="New Registration",
+                                        colour = author.colour)
+
+                Fields = [("Owner", author.mention, False),
+                          ("Bounty Hunter Name", name, False),
+                          ("Completed Contracts", COMPLETED_JOBS, True),
+                          ("Total Value of Jobs", f"{START_VALUE} {CREDITS_SYMBOL}", True),
+                          ("Bounty Hunters Guild", START_GUILD, False)]
+                
+                for name, value, inline in Fields:
+                    bh_embed.add_field(name=name, value=value, inline=inline)
+            
+                await ctx.send(embed=bh_embed)
+
+            else:
+                Name = author.display_name
+                hunterName = Name
+
+                db.execute("INSERT INTO BountyHunter (DiscordID, HunterName) VALUES (?, ?)", discordID, hunterName)
+                db.commit()
+
+                bh_embed = Embed(title="New Registration",
+                                        colour = author.colour)
+                Fields = [("Owner", author.mention, False),
+                          ("Bounty Hunter Name", hunterName, False),
+                          ("Completed Contracts", COMPLETED_JOBS, True),
+                          ("Total Value of Jobs", f"{START_VALUE} {CREDITS_SYMBOL}", True),
+                          ("Bounty Hunters Guild", START_GUILD, False)]
+                
+                for name, value, inline in Fields:
+                    bh_embed.add_field(name=name, value=value, inline=inline)
+
+                await ctx.send(embed=bh_embed)
+      
+    @Register_Hunter.error
+    async def hunter_register_error(self, ctx, exc):
+        if isinstance(exc, IntegrityError):
+            await ctx.send("An error occured. It appears that you already have a bounty hunter registered.")
+
+
+
 
     @command(name="assassin", aliases=["register-assassin"])
     async def Register_Assassin(self, ctx, name: Optional[str]):
         """Register an Assassin Character"""
         author = ctx.author
-        if name:
-            await ctx.send(f"Assassin Registered \n Owner: {ctx.author.mention} \n Character Name: {name} \n Completed Jobs: 0 \n Completed Jobs Value: 0")
+        discordID = author.id
+
+        CheckExists = db.field("SELECT DiscordID FROM Assassins WHERE DiscordID=?", discordID)
+        if CheckExists:
+            await ctx.send(f"{author.mention} you already have a Bounty Hunter registered.")
+
         else:
-            name = author.display_name
-            await ctx.send(f"Assassin Registered \n Owner: {author.mention} \n Character Name: {name} \n Completed Jobs: 0 \n Completed Jobs Value: 0")
+            if name:
+                AssassinName = name
+
+                db.execute("INSERT INTO Assassins (DiscordID, AssassinName) VALUES (?, ?)", discordID, AssassinName)
+                db.commit()
+
+                # EMBED
+                a_embed = Embed(title="New Registration",
+                                        colour = author.colour)
+
+                Fields = [("Owner", author.mention, False),
+                          ("Assassin Name", name, False),
+                          ("Completed Contracts", COMPLETED_JOBS, True),
+                          ("Total Value of Jobs", f"{START_VALUE} {CREDITS_SYMBOL}", True)]
+                
+                for name, value, inline in Fields:
+                    a_embed.add_field(name=name, value=value, inline=inline)
+            
+                await ctx.send(embed=a_embed)
+
+            else:
+                name = author.display_name
+                AssassinName = name
+
+                db.execute("INSERT INTO Assassins (DiscordID, AssassinName) VALUES (?, ?)", discordID, AssassinName)
+                db.commit()
+
+                # EMBED
+                a_embed = Embed(title="New Registration",
+                                        colour = author.colour)
+
+                Fields = [("Owner", author.mention, False),
+                          ("Assassin Name", name, False),
+                          ("Completed Contracts", COMPLETED_JOBS, True),
+                          ("Total Value of Jobs", f"{START_VALUE} {CREDITS_SYMBOL}", True)]
+                
+                for name, value, inline in Fields:
+                    a_embed.add_field(name=name, value=value, inline=inline)
+            
+                await ctx.send(embed=a_embed)
+
+    @Register_Assassin.error
+    async def Register_Assassin_Error(self, ctx, exc):
+        if isinstance(exc, IntegrityError):
+            await ctx.send("An error occured. It appears that you already have an assassin registered.")
+
+
+
+
+
+
+
+
 
     @command(name="list-hunters", aliases=["list-bounty-hunters", "hunters"])
     async def List_Hunters(self, ctx):
@@ -73,30 +164,142 @@ class Characters(Cog):
         """ Get a list of all assassins in the server """
         pass
 
+
+
+
+
+
+
+
     @command(name="hunter-search", aliases=["hunter-stats", "hunter-s"])
-    async def Search_Hunters(self, ctx, name: Optional[str]):
+    async def Search_Hunters(self, ctx, target: Optional[Member]):
         """Get the stats of a bounty hunter (default is yourself)"""
         author = ctx.author
-        if not name:
-            name = author.display_name
-            await ctx.send(f"Searched for {name} in the Galactic Archives.")
-        else:
-            await ctx.send(f"Searched for {name} in the Galactic Archives")
+        
+        if not target:
+            target = author
+            CheckExists = db.field("SELECT DiscordID FROM BountyHunter WHERE DiscordID=?", target.id)
+            if CheckExists:
+                print(f"---------------------------------------\n -->> {target.display_name} : {target.id}\n--------------------------------------------------")
+                    
+                bh_embed = Embed(title="Bounty Hunter Search",
+                                description=f"Searched for {target.mention}",
+                                colour=author.colour)
 
-    @command(name="assassin-search", aliases=["assassin-s"])
-    async def Search_Assassins(self, ctx, name: Optional[str]):
+                DiscordID = db.field("SELECT DiscordID FROM BountyHunter WHERE DiscordID=?", target.id)
+                HunterName = db.field("SELECT HunterName FROM BountyHunter WHERE DiscordID=?", target.id)
+                CompletedBounties = db.field("SELECT Completed FROM BountyHunter WHERE DiscordID=?", target.id)
+                BountyValue = db.field("SELECT Total_Jobs_Value FROM BountyHunter WHERE DiscordID=?", target.id)
+                Guild = db.field("SELECT Guild FROM BountyHunter WHERE DiscordID=?", target.id)
+
+                Fields = [("Owner", f"<@{DiscordID}>", False),
+                        ("Bounty Hunter Name", HunterName, False),
+                        ("Completed Jobs", CompletedBounties, True),
+                        ("Total Job Value", f"{BountyValue} {CREDITS_SYMBOL}", True),
+                        ("Guild", Guild, False)]
+
+                for name, value, inline in Fields:
+                    bh_embed.add_field(name=name, value=value, inline=inline)
+
+                await ctx.send(embed=bh_embed)
+            else:
+                await ctx.send(f"{author.mention}, when I searched for {target.mention} I found no results. They must not have a bounty hunter registered.")
+
+        else:
+            Target = target
+            CheckExists = db.field("SELECT DiscordID FROM BountyHunter WHERE DiscordID=?", target.id)
+
+            if CheckExists:
+                print(f"---------------------------------------\n -->> {Target.display_name} : {Target.id}\n--------------------------------------------------")
+
+                bh_embed = Embed(title="Bounty Hunter Search",
+                                 description=f"Searched for {target.mention}",
+                                 colour=author.colour)
+
+                DiscordID = db.field("SELECT DiscordID FROM BountyHunter WHERE DiscordID=?", target.id)
+                HunterName = db.field("SELECT HunterName FROM BountyHunter WHERE DiscordID=?", target.id)
+                CompletedBounties = db.field("SELECT Bounties_Completed FROM BountyHunter WHERE DiscordID=?", target.id)
+                BountyValue = db.field("SELECT Total_Jobs_Value FROM BountyHunter WHERE DiscordID=?", target.id)
+                Guild = db.field("SELECT Guild FROM BountyHunter WHERE DiscordID=?", target.id)
+
+                Fields = [("Owner", f"<@{DiscordID}>", False),
+                        ("Bounty Hunter Name", HunterName, False),
+                        ("Completed Jobs", CompletedBounties, True),
+                        ("Total Job Value", f"{BountyValue} {CREDITS_SYMBOL}", True),
+                        ("Guild", Guild, False)]
+
+                for name, value, inline in Fields:
+                    bh_embed.add_field(name=name, value=value, inline=inline)
+
+                await ctx.send(embed=bh_embed)
+            else:
+                await ctx.send(f"{author.mention}, when I searched for {target.mention} I found no results. They must not have a bounty hunter registered.")
+
+
+    @command(name="assassin-search", aliases=["assassin-s", "assassin-stats"])
+    async def Search_Assassins(self, ctx, target: Optional[Member]):
         """Get the stats of an Assassin (default is yourself)"""
         author = ctx.author
-        if not name:
-            name = author.display_name
-            await ctx.send(f"Searched for {name} in the Galactic Archives.")
+        if not target:
+            target = author
+            CheckExists = db.field("SELECT DiscordID FROM Assassins WHERE DiscordID=?", target.id)
+            if CheckExists:
+                print(f"---------------------------------------\n -->> {target.display_name} : {target.id}\n--------------------------------------------------")
+                    
+                a_embed = Embed(title="Bounty Hunter Search",
+                                description=f"Searched for {target.mention}",
+                                colour=author.colour)
+
+                DiscordID = db.field("SELECT DiscordID FROM Assassins WHERE DiscordID=?", target.id)
+                HunterName = db.field("SELECT AssassinName FROM Assassins WHERE DiscordID=?", target.id)
+                CompletedBounties = db.field("SELECT Completed FROM Assassins WHERE DiscordID=?", target.id)
+                BountyValue = db.field("SELECT Total_Jobs_Value FROM Assassins WHERE DiscordID=?", target.id)
+
+                Fields = [("Owner", f"<@{DiscordID}>", False),
+                        ("Assassin Name", HunterName, False),
+                        ("Completed Jobs", CompletedBounties, True),
+                        ("Total Job Value", f"{BountyValue} {CREDITS_SYMBOL}", True)]
+
+                for name, value, inline in Fields:
+                    a_embed.add_field(name=name, value=value, inline=inline)
+
+                await ctx.send(embed=a_embed)
+            else:
+                await ctx.send(f"{author.mention}, when I searched for {target.mention} I found no results. They must not have a bounty hunter registered.")
+
         else:
-            await ctx.send(f"Searched for {name} in the Galactic Archives")
+            Target = target
+            CheckExists = db.field("SELECT DiscordID FROM Assassins WHERE DiscordID=?", target.id)
+
+            if CheckExists:
+                print(f"---------------------------------------\n -->> {Target.display_name} : {Target.id}\n--------------------------------------------------")
+
+                a_embed = Embed(title="Bounty Hunter Search",
+                                 description=f"Searched for {target.mention}",
+                                 colour=author.colour)
+
+                DiscordID = db.field("SELECT DiscordID FROM Assassins WHERE DiscordID=?", target.id)
+                HunterName = db.field("SELECT AssassinName FROM Assassins WHERE DiscordID=?", target.id)
+                CompletedBounties = db.field("SELECT Completed FROM Assassins WHERE DiscordID=?", target.id)
+                BountyValue = db.field("SELECT Total_Jobs_Value FROM Assassins WHERE DiscordID=?", target.id)
+
+                Fields = [("Owner", f"<@{DiscordID}>", False),
+                        ("Assassin Name", HunterName, False),
+                        ("Completed Jobs", CompletedBounties, True),
+                        ("Total Job Value", f"{BountyValue} {CREDITS_SYMBOL}", True)]
+
+                for name, value, inline in Fields:
+                    a_embed.add_field(name=name, value=value, inline=inline)
+
+                await ctx.send(embed=a_embed)
+            else:
+                await ctx.send(f"{author.mention}, when I searched for {target.mention} I found no results. They must not have a bounty hunter registered.")
+
 
     @Cog.listener()
     async def on_ready(self):
         if not self.bot.ready:
-            self.bot.cogs_ready.ready_up("Bounty")
+            self.bot.cogs_ready.ready_up("Characters")
 
 
 
