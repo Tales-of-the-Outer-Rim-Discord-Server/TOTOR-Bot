@@ -12,17 +12,31 @@ from discord.ext.commands import Cog, BucketType
 from discord.ext.commands import BadArgument
 from discord.ext.commands import command, cooldown
 
+START_VALUE = 0
+COMPLETED_JOBS = 0
+START_GUILD = "No guild"
 
 class Characters(Cog):
     def __init__(self, bot):
         self.bot = bot
     
+
     def hunter_register(self, author, Name):
         Check1 = db.record("SELECT * FROM BountyHunter WHERE DiscordID=?", author.id)
-        if not Name: 
-            if not Check1:
-                db.execute("INSERT INTO BountyHunter (DiscordID) VALUES (?)", author.id)
-                db.execute("UPDATE BountyHunter SET HunterName=? WHERE DiscordID =?", Name, author.id)
+        print(f" -->> Check1 = {Check1}")
+        if Name: 
+            if Check1 == None:
+                discordID = author.id
+                hunterName = Name
+
+                Hunter = (discordID, hunterName, COMPLETED_JOBS, START_VALUE, START_GUILD)
+
+                db.execute("INSERT INTO BountyHunter VALUES (?, ?, ?, ?, ?)", Hunter)
+            else:
+                pass
+        else:
+            print("Name was not received")
+
 
     @command(name="bounty-hunter", aliases=["register-hunter"])
     async def Register_Hunter(self, ctx, name: Optional[str]):
@@ -30,10 +44,12 @@ class Characters(Cog):
         author = ctx.author
         if name:
                 Name = name
+                # print(f"Bounty Hunter Registered with name variable. \n >> AuthorId: {author.id} \n >> Name: {Name}")
                 self.hunter_register(author, Name)
                 # await ctx.send(f"Hunter Registered \n Owner: {ctx.author.mention} \n Character Name: {name} \n Guild: None \n Completed Bounties: 0 \n Completed Bounty Value: 0")
         else:
             Name = author.display_name
+            # print(f"Bounty Hunter Registered without name variable. \n >> AuthorId: {author.id} \n >> Name: {Name}")
             self.hunter_register(author, Name)
             # await ctx.send(f"Hunter Registered \n Owner: {author.mention} \n Character Name: {name} \n Guild: None \n Completed Bounties: 0 \n Completed Bounty Value: 0")
 

@@ -5,7 +5,7 @@
 
 CREATE TABLE IF NOT EXISTS BountyHunter (
     DiscordID integer PRIMARY KEY,
-    HunterName TEXT DEFAULT BLANK,
+    HunterName TEXT,
     Bounties_Completed integer DEFAULT 0,
     Bounty_Value integer DEFAULT 0,
     Guild TEXT DEFAULT NONE
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS BountyBoard (
 
 CREATE TABLE IF NOT EXISTS Assassins (
     DiscordID integer PRIMARY KEY,
-    AssassinName TEXT DEFAULT BLANK,
+    AssassinName TEXT,
     Completed integer DEFAULT 0,
     AssainationValue integer DEFAULT 0
 );

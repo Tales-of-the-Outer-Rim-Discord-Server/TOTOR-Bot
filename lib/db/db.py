@@ -25,7 +25,7 @@ def commit():
     cxn.commit()
 
 def autosave(sched):
-    sched.add_job(commit, CronTrigger(minute=30, second=0))
+    sched.add_job(commit, CronTrigger(hour=1, minute=0, second=0))
 
 
 def close():

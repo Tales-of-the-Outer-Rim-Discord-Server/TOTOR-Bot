@@ -196,7 +196,7 @@ class Shop(Cog):
 								colour=Author.colour)
 		item_info_embed.set_author(name=Author.display_name, icon_url=Author.avatar_url)
 		
-		item_levels = [("Common", "```Common items are those that were mas produced and barely policed by the Empire in 3ABY```", False),
+		item_levels = [("Common", "```Common items are those that were mass produced and barely policed by the Empire in 3ABY```", False),
 		               ("Rare", "```Rare items are those which are from no earlier than the Clone Wars. These are slightly policed by the empire but are not considdered illigal```", False),
 					   ("Restricted", "```Restricted items are those that are from before the clone wars or are deemed too powerful for a regular to control. These items are heavilly policed by the Empire and are classified as illegal```", False)]
 		
