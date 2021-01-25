@@ -1,6 +1,8 @@
 from asyncio.tasks import sleep
 from datetime import datetime
 from glob import glob
+
+from discord.ext.commands.core import _CaseInsensitiveDict
 from lib.cogs.bounty import BOUNTY_BOARD_CHANNEL
 
 from discord import Intents, Embed, File
@@ -11,7 +13,7 @@ from discord.ext.commands import (CommandNotFound, BadArgument, MissingRequiredA
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
-from discord.ext.commands.errors import CommandOnCooldown
+from discord.ext.commands.errors import CommandOnCooldown, MissingPermissions
 
 from ..db import db
 
@@ -29,7 +31,7 @@ class ready(object):
 			setattr(self, cog, False)
 	def ready_up(self, cog):
 		setattr(self, cog, True)
-		print(f' - {cog} cog is ready!')
+		print(f' - Cog Ready: {cog}')
 	def all_ready(self):
 		return all([getattr(self, cog) for cog in COGS])
 
@@ -49,42 +51,56 @@ class Bot(BotBase):
 			command_prefix=PREFIX,
 			owner_id=OWNER_ID,
 			intents=Intents.all(),
+			case_insensitive=True
 			)
 
 	def setup(self):
 		for cog in COGS:
 			self.load_extension(f"lib.cogs.{cog}")
-			print(f" - {cog} cog loaded")
+			print(f" - Loaded: {cog} cog")
 
-		print("Setup Complete")
+		print(f"Setup Complete")
 
 	def run(self, version):
 		self.VERSION = version
 
-		print("Running setup...")
+		print(f"\nRunning setup...")
 		self.setup()
 		
 		with open('./lib/bot/token.0', 'r', encoding='UTF-8') as tf:
 			self.TOKEN = tf.read()
 
-		print('Running bot...')
+		print('\nRunning bot...')
 		super().run(self.TOKEN, reconnect=True)
 
+	async def shutdown(self):
+		print(" >>>> Closing connection to Discord...")
+		await super().close()
+	
+	async def close(self):
+		print(" >>>> Closing on keyboard interrupt...")
+		await self.shutdown()
+	
 	async def on_connect(self):
-		print('Bot connected!')
-	async def  on_disconnect(self):
-		print('Bot disconnected!')
+		print(f' - Bot connected!\n - Latency: {self.latency*1000:,.0f} ms.\n')
+
+	async def on_resume(self):
+		print(f"\nBot resumed")
+	
+	async def on_disconnect(self):
+		print(f'\nBot disconnected!')
 
 	async def on_error(self, err, *args, **kwargs):
 		if err == "on_command_error":
 			await args[0].send('Something went wrong.')
 		raise err
+
 	async def on_command_error(self, ctx, exc):
 		if any([isinstance(exc, error) for error in IGNORE_EXCEPTIONS]):
 			pass
 
-		elif isinstance(exc, BadArgument):
-			pass
+		elif isinstance(exc, MissingPermissions):
+			await ctx.send("You dont have the required permissions to use this command!")
 
 		elif isinstance(exc, MissingRequiredArgument):
 			await ctx.send("One or more arguments are missing.") 
@@ -111,10 +127,10 @@ class Bot(BotBase):
 				await sleep(0.5)
 			
 			self.ready = True
-			print('Bot ready!')
+			print(f'\nBot ready!')
 
 		else:
-			print('Bot reconnected!')
+			print(f'\nBot reconnected!')
 
 	async def on_message(self, message):
 		if not message.author.bot:

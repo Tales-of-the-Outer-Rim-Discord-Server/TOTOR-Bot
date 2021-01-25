@@ -11,7 +11,7 @@ from ..bot import CREDITS_SYMBOL
 from aiohttp import request
 from discord import Member, Embed
 from discord.ext.commands import Cog, BucketType
-from discord.ext.commands import BadArgument 
+from discord.ext.commands import BadArgument, MissingPermissions
 from discord.ext.commands import command, cooldown
 from sqlite3 import IntegrityError
 
@@ -295,6 +295,154 @@ class Characters(Cog):
             else:
                 await ctx.send(f"{author.mention}, when I searched for {target.mention} I found no results. They must not have a bounty hunter registered.")
 
+
+
+    async def Add_To_Guild(self, ctx, target, guild):
+        CheckExists = db.field("SELECT DiscordID FROM BountyHunter WHERE DiscordID=?", target.id)
+
+        if CheckExists:
+
+            await ctx.send("Updating Database...")
+
+            db.execute("UPDATE BountyHunter SET Guild=? WHERE DiscordID=?", guild, target.id)
+            db.commit()
+
+        else:
+            await ctx.send("That person has not registered a bounty hunter on the server.")
+        
+
+
+
+
+    @command(name="assign-guild", aliases=["assign"])
+    @has_permissions(manage_roles=True)
+    async def Add_Guild(self, ctx, target: Member, guildID: int):
+        # House Tresario  - 1
+        # House Paramexor - 2
+        # House Salaktori - 3
+
+        if guildID == 0:
+            guild = "No Guild"
+
+            await self.Add_To_Guild(ctx, target, guild)
+
+            bh_embed = Embed(title="Bounty Hunter Updated",
+                              description=f"Records updated for {target.mention}",
+                              colour=0xff0000)
+
+            DiscordID = db.field("SELECT DiscordID FROM BountyHunter WHERE DiscordID=?", target.id)
+            HunterName = db.field("SELECT HunterName FROM BountyHunter WHERE DiscordID=?", target.id)
+            CompletedBounties = db.field("SELECT Completed FROM BountyHunter WHERE DiscordID=?", target.id)
+            BountyValue = db.field("SELECT Total_Jobs_Value FROM BountyHunter WHERE DiscordID=?", target.id)
+            NewGuild = db.field("SELECT Guild FROM BountyHunter WHERE DiscordID=?", target.id)
+
+            Fields = [("Owner", f"<@{DiscordID}>", False),
+                      ("Bounty Hunter Name", HunterName, False),
+                      ("Completed Jobs", CompletedBounties, True),
+                      ("Total Job Value", f"{BountyValue} {CREDITS_SYMBOL}", True),
+                      ("Guild", NewGuild, False)]
+
+            for name, value, inline in Fields:
+                bh_embed.add_field(name=name, value=value, inline=inline)
+
+            await ctx.send(embed=bh_embed) 
+            # assign House Salaktori
+    
+        elif guildID == 1:
+            guild = "House Tresario"
+
+            await self.Add_To_Guild(ctx, target, guild)
+
+            bh_embed = Embed(title="Bounty Hunter Updated",
+                              description=f"Records updated for {target.mention}",
+                              colour=0xff0000)
+
+            DiscordID = db.field("SELECT DiscordID FROM BountyHunter WHERE DiscordID=?", target.id)
+            HunterName = db.field("SELECT HunterName FROM BountyHunter WHERE DiscordID=?", target.id)
+            CompletedBounties = db.field("SELECT Completed FROM BountyHunter WHERE DiscordID=?", target.id)
+            BountyValue = db.field("SELECT Total_Jobs_Value FROM BountyHunter WHERE DiscordID=?", target.id)
+            NewGuild = db.field("SELECT Guild FROM BountyHunter WHERE DiscordID=?", target.id)
+
+            Fields = [("Owner", f"<@{DiscordID}>", False),
+                      ("Bounty Hunter Name", HunterName, False),
+                      ("Completed Jobs", CompletedBounties, True),
+                      ("Total Job Value", f"{BountyValue} {CREDITS_SYMBOL}", True),
+                      ("Guild", NewGuild, False)]
+
+            for name, value, inline in Fields:
+                bh_embed.add_field(name=name, value=value, inline=inline)
+
+            await ctx.send(embed=bh_embed) 
+            # assign House Tresario
+        elif guildID == 2:
+            guild = "House Paramexor"
+
+            await self.Add_To_Guild(ctx, target, guild)
+
+            bh_embed = Embed(title="Bounty Hunter Updated",
+                              description=f"Records updated for {target.mention}",
+                              colour=0xff0000)
+
+            DiscordID = db.field("SELECT DiscordID FROM BountyHunter WHERE DiscordID=?", target.id)
+            HunterName = db.field("SELECT HunterName FROM BountyHunter WHERE DiscordID=?", target.id)
+            CompletedBounties = db.field("SELECT Completed FROM BountyHunter WHERE DiscordID=?", target.id)
+            BountyValue = db.field("SELECT Total_Jobs_Value FROM BountyHunter WHERE DiscordID=?", target.id)
+            NewGuild = db.field("SELECT Guild FROM BountyHunter WHERE DiscordID=?", target.id)
+
+            Fields = [("Owner", f"<@{DiscordID}>", False),
+                      ("Bounty Hunter Name", HunterName, False),
+                      ("Completed Jobs", CompletedBounties, True),
+                      ("Total Job Value", f"{BountyValue} {CREDITS_SYMBOL}", True),
+                      ("Guild", NewGuild, False)]
+
+            for name, value, inline in Fields:
+                bh_embed.add_field(name=name, value=value, inline=inline)
+
+            await ctx.send(embed=bh_embed) 
+            # assign house Paramexor
+            
+        elif guildID == 3:
+            guild = "House Salaktori"
+
+            await self.Add_To_Guild(ctx, target, guild)
+
+            bh_embed = Embed(title="Bounty Hunter Updated",
+                              description=f"Records updated for {target.mention}",
+                              colour=0xff0000)
+
+            DiscordID = db.field("SELECT DiscordID FROM BountyHunter WHERE DiscordID=?", target.id)
+            HunterName = db.field("SELECT HunterName FROM BountyHunter WHERE DiscordID=?", target.id)
+            CompletedBounties = db.field("SELECT Completed FROM BountyHunter WHERE DiscordID=?", target.id)
+            BountyValue = db.field("SELECT Total_Jobs_Value FROM BountyHunter WHERE DiscordID=?", target.id)
+            NewGuild = db.field("SELECT Guild FROM BountyHunter WHERE DiscordID=?", target.id)
+
+            Fields = [("Owner", f"<@{DiscordID}>", False),
+                      ("Bounty Hunter Name", HunterName, False),
+                      ("Completed Jobs", CompletedBounties, True),
+                      ("Total Job Value", f"{BountyValue} {CREDITS_SYMBOL}", True),
+                      ("Guild", NewGuild, False)]
+
+            for name, value, inline in Fields:
+                bh_embed.add_field(name=name, value=value, inline=inline)
+
+            await ctx.send(embed=bh_embed) 
+            # assign House Salaktori
+            
+        else:
+            guilds_embed = Embed(title="Unique IDs for the 3 guilds",
+                                 description="Each house has been assigned a unique ID for use with that command. \nPlease try again using the correct id shown below.",
+                                 colour = ctx.author.colour)
+            Fields = [("No Guild",        "Unique ID: 0", False),
+                      ("House Tresario",  "Unique ID: 1", False),
+                      ("House Paramexor", "Unique ID: 2", False),
+                      ("House Salaktori", "Unique ID: 3", False)]
+
+            for name, value, inline in Fields:
+                guilds_embed.add_field(name=name, value=value, inline=inline)
+
+            await ctx.send(embed=guilds_embed) 
+
+  
 
     @Cog.listener()
     async def on_ready(self):

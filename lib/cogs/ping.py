@@ -14,7 +14,7 @@ class Ping(Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @command(name="Ping", aliases=["ping", "p", "info", "bot-info"])
+    @command(name="Ping", aliases=["p", "info", "bot-info"])
     async def ping(self, ctx):
         """ Gets the bot's ping to the server. """                                                                      # COMMAND DESCRIPTION
         ping = round(self.bot.latency * 1000)                                                                           # GENERATES PING VALUE

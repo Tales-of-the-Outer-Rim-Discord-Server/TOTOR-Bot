@@ -51,7 +51,7 @@ class Reset(Cog):
     			ctx.send(f"I do not have the required permissions to perform this task. Try moving my role above {Author.top_role}")
 
 
-	@command(name="multi_reset", aliases=["m_reset", "Multi", "Multi_Reset"])
+	@command(name="multi_reset", aliases=["m_reset", "Multi"])
 	@bot_has_permissions(manage_roles = True)
 	@has_permissions(manage_roles = True, manage_guild = True)
 	async def Multi_Reset(self, ctx, targets: Greedy[Member]):

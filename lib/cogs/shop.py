@@ -210,7 +210,7 @@ class Shop(Cog):
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:
-			self.bot.cogs_ready.ready_up("reset")
+			self.bot.cogs_ready.ready_up("shop")
 
 
 def setup(bot):

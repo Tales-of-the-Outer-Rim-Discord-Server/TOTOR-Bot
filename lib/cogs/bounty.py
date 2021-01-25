@@ -47,15 +47,29 @@ class Bounty(Cog):
 			await ctx.send(f"{author.mention} you must mention a target for the bounty")
 
 
+
+
+
+
+
+
 	@command(name="claim-bounty", aliases=["bounty-claim", "claim", "bounty-c"])
 	async def Claim_Bounty(self, ctx, holder: Member, target: Member, dead: Optional[str]=False):
+		"""Claim a bounty on completion of the task"""
 		author = ctx.author
 		pass
+
+
+
+
+
+
+
 
 	@command(name="list-bounties", aliases=["bounties-list", "bounties-l"])
 	async def List_Bounties(self, ctx, target: Optional[Member]):
 		pass
-	
+
 
 	@Cog.listener()
 	async def on_ready(self):
