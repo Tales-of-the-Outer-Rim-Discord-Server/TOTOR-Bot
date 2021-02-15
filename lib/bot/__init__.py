@@ -3,7 +3,6 @@ from datetime import datetime
 from glob import glob
 
 from discord.ext.commands.core import _CaseInsensitiveDict
-from lib.cogs.bounty import BOUNTY_BOARD_CHANNEL
 
 from discord import Intents, Embed, File
 from discord.errors import Forbidden, HTTPException
@@ -18,11 +17,10 @@ from discord.ext.commands.errors import CommandOnCooldown, MissingPermissions
 from ..db import db
 
 
-PREFIX = 't!'
+PREFIX = '!'
 OWNER_ID = 197748134485426177
 COGS = [path.split("\\")[-1][:-3] for path in glob('./lib/cogs/*.py')]
 IGNORE_EXCEPTIONS = (CommandNotFound, BadArgument)
-CREDITS_SYMBOL = "<:Credits:801201215375015966>"
 BOUNTY_BOARD_CHANNEL = 801213077353660436
 
 class ready(object):
@@ -43,7 +41,7 @@ class Bot(BotBase):
 		self.guild = None
 		self.cogs_ready = ready()
 
-		self.scheduler = AsyncIOScheduler()
+		self.scheduler = AsyncIOScheduler({'apscheduler.timezone': 'Europe/London'})
 		self.scheduler.start() 
 
 		db.autosave(self.scheduler)
